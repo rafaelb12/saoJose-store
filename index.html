@@ -290,31 +290,7 @@
   .tamanho-btn { width: 38px; height: 38px; border: 1px solid rgba(201,168,76,.4); background: transparent; color: rgba(255,255,255,.7); font-family: 'Jost', sans-serif; font-size: .75rem; cursor: pointer; transition: all .15s; }
   .tamanho-btn:hover, .tamanho-btn.sel { background: var(--ouro); border-color: var(--ouro); color: var(--verde); }
   .modal-tamanho-label { font-size: .68rem; letter-spacing: .15em; text-transform: uppercase; color: rgba(201,168,76,.6); margin-bottom: .6rem; }
-  /* ── PEDIDO BOX ── */
-  .pedido-box {
-    background: rgba(0,0,0,.25); border: 1px solid rgba(201,168,76,.2);
-    padding: 1rem 1.1rem; margin-bottom: 1rem;
-  }
-  .pedido-box-label {
-    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-    color: rgba(201,168,76,.55); margin-bottom: .6rem;
-  }
-  .pedido-box-texto {
-    font-size: .82rem; color: rgba(255,255,255,.8); line-height: 1.7;
-    white-space: pre-wrap; word-break: break-word;
-  }
-
   .modal-actions { display: flex; gap: 8px; }
-
-  .btn-copiar {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: transparent; border: 1px solid rgba(201,168,76,.5); color: var(--ouro);
-    font-size: .68rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
-    padding: 13px 16px; font-family: 'Jost', sans-serif; cursor: pointer;
-    transition: background .2s, color .2s; white-space: nowrap; flex-shrink: 0;
-  }
-  .btn-copiar:hover { background: rgba(201,168,76,.12); }
-  .btn-copiar.copiado { border-color: #4caf78; color: #4caf78; }
 
   .btn-wpp-modal {
     flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -466,19 +442,9 @@
     <p id="m-desc">Descrição do produto.</p>
     <p class="modal-tamanho-label">Escolha o tamanho</p>
     <div class="modal-tamanhos" id="m-tamanhos"></div>
-    <div class="pedido-box">
-      <p class="pedido-box-label">📋 Mensagem do pedido</p>
-      <p class="pedido-box-texto" id="m-pedido-texto"></p>
-    </div>
     <div class="modal-actions">
-      <button class="btn-copiar" id="btn-copiar" onclick="copiarMensagem()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-        </svg>
-        Copiar
-      </button>
-      <button class="btn-wpp-modal" id="btn-wpp-modal" onclick="abrirWhatsapp()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 011.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 01-1.153 1.772 4.915 4.915 0 01-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 01-1.772-1.153 4.904 4.904 0 01-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 011.153-1.772A4.897 4.897 0 015.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2z" opacity="0"/><path d="M19.05 4.91A9.816 9.816 0 0012.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 01-1.26-4.38c0-4.54 3.69-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.184 8.184 0 012.41 5.82c.01 4.55-3.68 8.25-8.22 8.25zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.18-.53.06-1.45-.72-2.4-1.29-3.36-2.93-.25-.44.25-.41.72-1.36.08-.17.04-.31-.04-.44-.08-.12-.5-1.2-.68-1.61-.18-.42-.36-.36-.51-.36-.13 0-.29-.01-.44-.01-.15 0-.39.06-.6.3-.21.25-.8.78-.8 1.89 0 1.11.81 2.18 1.39 2.34.12.04 1.32 1.07 3.21 1.86 2.21.91 2.21.61 2.61.57.39-.04 1.27-.52 1.45-1.02.18-.5.18-.94.13-1.02-.06-.1-.21-.16-.45-.27z"/></svg>
+      <button class="btn-wpp-modal" id="btn-wpp-modal" onclick="abrirWhatsapp()" style="flex:none; width:100%;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.816 9.816 0 0012.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 01-1.26-4.38c0-4.54 3.69-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.184 8.184 0 012.41 5.82c.01 4.55-3.68 8.25-8.22 8.25zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.18-.53.06-1.45-.72-2.4-1.29-3.36-2.93-.25-.44.25-.41.72-1.36.08-.17.04-.31-.04-.44-.08-.12-.5-1.2-.68-1.61-.18-.42-.36-.36-.51-.36-.13 0-.29-.01-.44-.01-.15 0-.39.06-.6.3-.21.25-.8.78-.8 1.89 0 1.11.81 2.18 1.39 2.34.12.04 1.32 1.07 3.21 1.86 2.21.91 2.21.61 2.61.57.39-.04 1.27-.52 1.45-1.02.18-.5.18-.94.13-1.02-.06-.1-.21-.16-.45-.27z"/></svg>
         Pedir no WhatsApp
       </button>
     </div>
@@ -745,7 +711,6 @@ function abrirModalObj(encoded) {
   }
 
   carregarTamanhosDisponiveis(p.id);
-  atualizarPreviewPedido();
   document.getElementById('modal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -763,18 +728,12 @@ function selTam(btn) {
   document.querySelectorAll('.tamanho-btn').forEach(b => b.classList.remove('sel'));
   btn.classList.add('sel');
   tamanhoSel = btn.textContent;
-  atualizarPreviewPedido();
 }
 
-// ── PREVIEW DA MENSAGEM ──
+// ── MENSAGEM DO PEDIDO (enviada direto pro WhatsApp) ──
 function montarMensagemPedido() {
   const tam = tamanhoSel ? ` – Tamanho: ${tamanhoSel}` : '';
   return `Olá! Gostaria de pedir:\n\n🛍️ ${produtoAtual.nome}${tam}\n💰 ${fmtPreco(produtoAtual.preco)}\n\nPode me ajudar?`;
-}
-
-function atualizarPreviewPedido() {
-  const el = document.getElementById('m-pedido-texto');
-  if (el) el.textContent = montarMensagemPedido();
 }
 
 // ── TOAST ──
@@ -787,23 +746,7 @@ function mostrarToast(texto, tipo = 'ok') {
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ── AÇÕES WHATSAPP ──
-async function copiarMensagem() {
-  const msg = montarMensagemPedido();
-  const btn = document.getElementById('btn-copiar');
-  try {
-    await navigator.clipboard.writeText(msg);
-    btn.classList.add('copiado');
-    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
-    mostrarToast('✓ Mensagem copiada!');
-    setTimeout(() => {
-      btn.classList.remove('copiado');
-      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar`;
-    }, 2500);
-  } catch (e) {
-    mostrarToast('Não foi possível copiar. Selecione o texto manualmente.');
-  }
-}
+// ── AÇÃO WHATSAPP ──
 
 async function abrirWhatsapp() {
   // garante que temos o número mais atualizado possível antes de abrir
