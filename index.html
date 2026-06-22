@@ -171,7 +171,6 @@
   }
   .destaque-card:hover .destaque-btn { opacity: 1; }
 
-  /* placeholder */
   .img-placeholder {
     width: 100%; height: 100%; background: var(--verde-medio);
     display: flex; align-items: center; justify-content: center;
@@ -180,7 +179,6 @@
   .img-placeholder svg { opacity: .3; }
   .img-placeholder span { font-size: .7rem; color: rgba(201,168,76,.4); letter-spacing: .1em; text-transform: uppercase; }
 
-  /* skeleton */
   .skeleton {
     background: linear-gradient(90deg, var(--verde-medio) 25%, var(--verde-claro) 50%, var(--verde-medio) 75%);
     background-size: 200% 100%;
@@ -230,7 +228,6 @@
   .btn-wpp:hover { background: var(--ouro-claro); transform: scale(1.02); }
   .btn-wpp svg { flex-shrink: 0; }
 
-  /* skeleton cards */
   .produto-card.skeleton-card .produto-img { background: var(--verde); }
   .produto-card.skeleton-card .ske-line {
     height: 12px; border-radius: 2px; margin-bottom: 8px;
@@ -239,7 +236,6 @@
   .produto-card.skeleton-card .ske-line.w80 { width: 80%; }
   .produto-card.skeleton-card .ske-line.w40 { width: 40%; }
 
-  /* empty state catálogo */
   .catalogo-empty {
     grid-column: 1/-1; text-align: center; padding: 60px 20px;
     color: rgba(255,255,255,.25);
@@ -280,7 +276,6 @@
   .modal-preco { font-size: 1.1rem; color: var(--ouro-claro); margin-bottom: 1.2rem; letter-spacing: .05em; }
   .modal p { font-size: .85rem; color: rgba(255,255,255,.65); line-height: 1.8; margin-bottom: 1.5rem; }
 
-  /* galeria de fotos no modal */
   .modal-galeria { display: flex; gap: 8px; margin-bottom: 1.2rem; overflow-x: auto; padding-bottom: 4px; }
   .modal-galeria img { width: 72px; height: 72px; object-fit: cover; border: 1px solid rgba(201,168,76,.2); cursor: pointer; flex-shrink: 0; opacity: .7; transition: opacity .2s, border-color .2s; }
   .modal-galeria img.ativa { opacity: 1; border-color: var(--ouro); }
@@ -455,11 +450,11 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── SUPABASE ──
+// ── SUPABASE — usando anon key (segura para uso público no navegador) ──
 const { createClient } = supabase;
 const sb = createClient(
   'https://crelfwcortppwwpxxaye.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyZWxmd2NvcnRwcHd3cHh4YXllIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDczMzI2OCwiZXhwIjoyMDk2MzA5MjY4fQ.8D2JcEC4ss81kIKsnu6LY7r_OnhjlOUl5KNL77hMmg4'
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyZWxmd2NvcnRwcHd3cHh4YXllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MzMyNjgsImV4cCI6MjA5NjMwOTI2OH0.4TjwgHSiMS5bufYLl3SX8SIYE8A8WJjYpeQSKjaf4oE'
 );
 
 // ── STATE ──
@@ -467,7 +462,6 @@ let todosProdutos = [];
 let categoriaAtiva = 'todos';
 let produtoAtual = {};
 let tamanhoSel = '';
-let whatsappAtivo = ''; // número de WhatsApp atualmente em atendimento (carregado do Supabase)
 
 // ── MOBILE MENU ──
 const menuToggle = document.getElementById('menuToggle');
@@ -486,10 +480,6 @@ function fmtPreco(v) {
   return 'R$ ' + Number(v).toFixed(2).replace('.', ',');
 }
 
-function iconeCamiseta() {
-  return `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#c9a84c" stroke-width="1.2"><path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"/></svg>`;
-}
-
 function thumbHTML(imgs, grande = false) {
   const sz = grande ? 48 : 36;
   if (imgs && imgs.length > 0) {
@@ -501,19 +491,18 @@ function thumbHTML(imgs, grande = false) {
   </div>`;
 }
 
-// ── CARREGAR NÚMERO DE WHATSAPP ATIVO ──
+// ── CARREGAR NÚMERO DE WHATSAPP ATIVO (sempre busca o mais recente) ──
 async function carregarWhatsappAtivo() {
   const { data, error } = await sb.from('configuracoes').select('*').eq('id', 1).single();
   if (error) {
     console.error('Erro ao carregar número de WhatsApp ativo:', error);
-    return;
+    return null;
   }
-  whatsappAtivo = data.numero_ativo === 2 ? data.numero_2_whatsapp : data.numero_1_whatsapp;
+  return data.numero_ativo === 2 ? data.numero_2_whatsapp : data.numero_1_whatsapp;
 }
 
 // ── CARREGAR DO SUPABASE ──
 async function carregarProdutos() {
-  // skeletons enquanto carrega
   document.getElementById('destaque-grid').innerHTML =
     '<div class="destaque-card large skeleton skeleton-card"></div>' +
     '<div class="destaque-card skeleton skeleton-card"></div>' +
@@ -530,7 +519,6 @@ async function carregarProdutos() {
 
   if (error) {
     console.error('Erro Supabase:', error);
-    // fallback: limpa skeletons com mensagem
     document.getElementById('destaque-grid').innerHTML = '<p style="color:rgba(255,255,255,.3);text-align:center;padding:40px;grid-column:1/-1">Erro ao carregar produtos.</p>';
     document.getElementById('catalogo-grid').innerHTML = '<div class="catalogo-empty"><p>Erro ao carregar produtos.</p></div>';
     return;
@@ -545,15 +533,9 @@ async function carregarProdutos() {
 function renderDestaques() {
   const grid = document.getElementById('destaque-grid');
   const destaques = todosProdutos.filter(p => p.destaque).slice(0, 3);
-
-  if (!destaques.length) {
-    // sem destaques: mostra os 3 mais recentes
-    const recentes = todosProdutos.slice(0, 3);
-    if (!recentes.length) { grid.innerHTML = ''; return; }
-    renderDestaquesLista(grid, recentes);
-    return;
-  }
-  renderDestaquesLista(grid, destaques);
+  const lista = destaques.length ? destaques : todosProdutos.slice(0, 3);
+  if (!lista.length) { grid.innerHTML = ''; return; }
+  renderDestaquesLista(grid, lista);
 }
 
 function renderDestaquesLista(grid, lista) {
@@ -572,7 +554,6 @@ function renderDestaquesLista(grid, lista) {
     </div>`;
   }).join('');
 
-  // re-aplica hover nas imagens geradas dinamicamente
   grid.querySelectorAll('.destaque-card img').forEach(img => {
     const card = img.closest('.destaque-card');
     card.addEventListener('mouseenter', () => { img.style.opacity='.55'; img.style.transform='scale(1.04)'; });
@@ -612,7 +593,6 @@ function renderCatalogo(lista) {
     </div>`;
   }).join('');
 
-  // hover imagens
   grid.querySelectorAll('.produto-card img').forEach(img => {
     const card = img.closest('.produto-card');
     card.addEventListener('mouseenter', () => img.style.transform='scale(1.05)');
@@ -628,7 +608,7 @@ function filtrar(cat, btn) {
   renderCatalogo(lista);
 }
 
-// ── TAMANHOS DISPONÍVEIS (busca direto no banco) ──
+// ── TAMANHOS DISPONÍVEIS ──
 const ORDEM_TAMANHOS = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XGG', 'EG', 'EGG'];
 
 function ordenarTamanhos(tamanhos) {
@@ -683,7 +663,6 @@ function abrirModalObj(encoded) {
   document.getElementById('m-preco').textContent = fmtPreco(p.preco);
   document.getElementById('m-desc').textContent = p.descricao || '';
 
-  // galeria de fotos
   const galeria = document.getElementById('m-galeria');
   const fotoPrincipal = document.getElementById('m-foto-principal');
   galeria.innerHTML = '';
@@ -730,7 +709,7 @@ function selTam(btn) {
   tamanhoSel = btn.textContent;
 }
 
-// ── MENSAGEM DO PEDIDO (enviada direto pro WhatsApp) ──
+// ── MENSAGEM DO PEDIDO ──
 function montarMensagemPedido() {
   const tam = tamanhoSel ? ` – Tamanho: ${tamanhoSel}` : '';
   return `Olá! Gostaria de pedir:\n\n🛍️ ${produtoAtual.nome}${tam}\n💰 ${fmtPreco(produtoAtual.preco)}\n\nPode me ajudar?`;
@@ -738,7 +717,7 @@ function montarMensagemPedido() {
 
 // ── TOAST ──
 let toastTimeout;
-function mostrarToast(texto, tipo = 'ok') {
+function mostrarToast(texto) {
   const toast = document.getElementById('toast');
   toast.textContent = texto;
   toast.classList.add('show');
@@ -746,23 +725,29 @@ function mostrarToast(texto, tipo = 'ok') {
   toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ── AÇÃO WHATSAPP ──
-
+// ── AÇÃO WHATSAPP — sempre busca o número mais atualizado do banco ──
 async function abrirWhatsapp() {
-  // garante que temos o número mais atualizado possível antes de abrir
-  if (!whatsappAtivo) {
-    await carregarWhatsappAtivo();
-  }
-  if (!whatsappAtivo) {
-    mostrarToast('Não foi possível identificar o WhatsApp da loja agora. Tente novamente em instantes.');
+  const btn = document.getElementById('btn-wpp-modal');
+  btn.disabled = true;
+  btn.textContent = 'Aguarde...';
+
+  const numero = await carregarWhatsappAtivo();
+
+  btn.disabled = false;
+  btn.innerHTML = `
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.05 4.91A9.816 9.816 0 0012.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01zm-7.01 15.24c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.264 8.264 0 01-1.26-4.38c0-4.54 3.69-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.184 8.184 0 012.41 5.82c.01 4.55-3.68 8.25-8.22 8.25zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.18-.53.06-1.45-.72-2.4-1.29-3.36-2.93-.25-.44.25-.41.72-1.36.08-.17.04-.31-.04-.44-.08-.12-.5-1.2-.68-1.61-.18-.42-.36-.36-.51-.36-.13 0-.29-.01-.44-.01-.15 0-.39.06-.6.3-.21.25-.8.78-.8 1.89 0 1.11.81 2.18 1.39 2.34.12.04 1.32 1.07 3.21 1.86 2.21.91 2.21.61 2.61.57.39-.04 1.27-.52 1.45-1.02.18-.5.18-.94.13-1.02-.06-.1-.21-.16-.45-.27z"/></svg>
+    Pedir no WhatsApp`;
+
+  if (!numero) {
+    mostrarToast('Não foi possível identificar o WhatsApp da loja. Tente novamente.');
     return;
   }
+
   const msg = encodeURIComponent(montarMensagemPedido());
-  window.open(`https://wa.me/${whatsappAtivo}?text=${msg}`, '_blank');
+  window.open(`https://wa.me/${numero}?text=${msg}`, '_blank');
 }
 
 // ── INIT ──
-carregarWhatsappAtivo();
 carregarProdutos();
 </script>
 </body>
